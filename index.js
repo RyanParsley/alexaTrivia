@@ -17,13 +17,10 @@ var questions;
 
 var questionData = new questionHelper();
 
-questionData.requestQuestions().then(function(questions){
-  console.log("questions: ", questions);
-  formatQuestions(questions);
-});
 
 var formatQuestions = function(questions){
   console.log("Format Questions");
+  console.log("questions: ", questions);
   /**
    * When editing your questions pay attention to your punctuation. Make sure you use question marks or periods.
    * Make sure the first answer is the correct one. Set at least ANSWER_COUNT answers, any extras will be shuffled in.
@@ -84,6 +81,7 @@ var formatQuestions = function(questions){
           }
         }
       };
+  console.log("languageString: ", languageString);
 };
 
   exports.handler = function(event, context, callback) {
@@ -117,6 +115,9 @@ var formatQuestions = function(questions){
   var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
     "StartGame": function (newGame) {
       console.log("Start Game");
+        questionData.requestQuestions().then(function(questions){
+          formatQuestions(questions);
+        });
         var speechOutput = newGame ? this.t("NEW_GAME_MESSAGE", this.t("GAME_NAME")) + this.t("WELCOME_MESSAGE", GAME_LENGTH.toString()) : "";
         // Select GAME_LENGTH questions for the game
         var translatedQuestions = this.t("QUESTIONS");
